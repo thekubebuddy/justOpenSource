@@ -1,0 +1,10 @@
+bases:
+- ../../base
+namespace: dev
+nameSuffix: -dev
+commonLabels:
+  run: flask-app-dev
+  app: flask-app
+patchesStrategicMerge:
+- custom-env.yaml
+- flask-dev-ing.yaml 

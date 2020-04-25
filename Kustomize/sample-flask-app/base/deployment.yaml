@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: flask-app
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: flask-app
+  template:
+    metadata:
+      labels:
+        run: flask-app
+    spec:
+     containers:
+      - env:
+        - name: APP_COLOR
+          value: pink
+        image: kodekloud/webapp-color
+        name: flask-app
+          

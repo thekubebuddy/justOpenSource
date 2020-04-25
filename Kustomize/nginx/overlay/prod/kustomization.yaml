@@ -1,0 +1,10 @@
+nameSuffix: -prod
+bases:
+- ../../base
+images:
+- name: nginx
+  newTag: latest
+  newName: kodekloud/webapp-color
+commonLabels:
+  tier: prod
+namespace: prod

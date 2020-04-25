@@ -1,0 +1,10 @@
+bases:
+- ../../base
+namespace: prod
+nameSuffix: -prod
+commonLabels:
+  run: flask-app-prod
+  app: flask-app
+patchesStrategicMerge:
+- custom-env.yaml
+- flask-prod-ing.yaml

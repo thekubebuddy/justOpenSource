@@ -1,0 +1,10 @@
+bases:
+- ../../base
+namespace: staging
+nameSuffix: -staging
+commonLabels:
+  run: flask-app-staging
+  app: flask-app
+patchesStrategicMerge:
+- custom-env.yaml
+- flask-staging-ing.yaml

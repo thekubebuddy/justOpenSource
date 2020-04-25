@@ -1,0 +1,9 @@
+bases:
+- ../../base
+#namePrefix: dev-
+nameSuffix: -dev
+images:
+- name: nginx
+  newTag: latest
+  newName: nginx
+namespace: default

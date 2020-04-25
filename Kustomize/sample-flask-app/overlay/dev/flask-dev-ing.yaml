@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: flask-ingress
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: dev-flask.app.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: flask-app-dev
+              servicePort: 8080
