@@ -22,9 +22,14 @@ kustomize build .
 ```
 
 Refrences:
-[Kustomization CLI installation](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)s
+[Kustomization CLI installation](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md)
+
 [Kustomize: Kubernetes Configuration Customization](https://www.youtube.com/watch?v=WWJDbHo-OeY)
+
 [Kubernetes-SIG](https://github.com/kubernetes-sigs/kustomize)
+
 [\*\*Kustomization fields](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/fields.md)
+
 [Wordperss Example of kustomization](https://github.com/kubernetes-sigs/kustomize/tree/master/examples/wordpress)
+
 [Intro to kustomize]https://kubectl.docs.kubernetes.io/pages/app_management/introduction.html
