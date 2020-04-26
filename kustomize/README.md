@@ -27,4 +27,4 @@ Refrences:
 [Kubernetes-SIG](https://github.com/kubernetes-sigs/kustomize)
 [\*\*Kustomization fields](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/fields.md)
 [Wordperss Example of kustomization](https://github.com/kubernetes-sigs/kustomize/tree/master/examples/wordpress)
-https://kubectl.docs.kubernetes.io/pages/app_management/introduction.html
+[Intro to kustomize]https://kubectl.docs.kubernetes.io/pages/app_management/introduction.html
