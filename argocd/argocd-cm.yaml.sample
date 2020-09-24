@@ -1,0 +1,33 @@
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-cm
+apiVersion: v1
+data:
+  # adding an addtional users
+  accounts.alice: apiKey, login
+  accounts.bob: login
+  application.instanceLabelKey: argocd.argoproj.io/instance
+  # Kustomize build and version config option
+  kustomize.buildOptions: --load_restrictor none
+  kustomize.version.v3.5.5: /custom-tools/kustomize_3_5_5
+  repositories: |
+    - passwordSecret:
+        key: password
+        name: repo-101801884
+      type: git
+      url: ""
+      usernameSecret:
+        key: username
+        name: repo-101801884
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  # enforcing readonly policies for all of the users
+  policy.default: role:readonly
