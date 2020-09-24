@@ -6,6 +6,3 @@ resources:
 - prometheus-deployment.yml
 - prometheus-service.yml 
 - kube-state-metrics.yml
-image:
-- name: prometheus
-  imageTags: 1.1.1

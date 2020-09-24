@@ -95,7 +95,7 @@
               "intervalFactor": 10,
               "legendFormat": "",
               "refId": "A",
-              "step": 50
+              "step": 20
             }
           ],
           "thresholds": [],
@@ -176,7 +176,7 @@
               "intervalFactor": 4,
               "legendFormat": "load 1m",
               "refId": "A",
-              "step": 20,
+              "step": 8,
               "target": ""
             },
             {
@@ -184,7 +184,7 @@
               "intervalFactor": 4,
               "legendFormat": "load 5m",
               "refId": "B",
-              "step": 20,
+              "step": 8,
               "target": ""
             },
             {
@@ -192,7 +192,7 @@
               "intervalFactor": 4,
               "legendFormat": "load 15m",
               "refId": "C",
-              "step": 20,
+              "step": 8,
               "target": ""
             }
           ],
@@ -420,11 +420,11 @@
           },
           "targets": [
             {
-              "expr": "((sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes) - sum(node_memory_Buffers_bytes) - sum(node_memory_Cached_bytes)) / sum(node_memory_MemTotal_bytes)) * 100",
+              "expr": " ((sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes) - sum(node_memory_Buffers_bytes) - sum(node_memory_Cached_bytes)) / sum(node_memory_MemTotal_bytes)) * 100",
               "intervalFactor": 2,
               "metric": "",
               "refId": "A",
-              "step": 60,
+              "step": 40,
               "target": ""
             }
           ],
@@ -505,7 +505,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(node_nfsd_disk_bytes_read_total[5m]))",
+              "expr": "sum(rate(node_disk_read_bytes_total[5m]))",
               "hide": false,
               "intervalFactor": 4,
               "legendFormat": "read",
@@ -514,7 +514,7 @@
               "target": ""
             },
             {
-              "expr": "sum(rate(node_nfsd_disk_bytes_written_total[5m]))",
+              "expr": "sum(rate(node_disk_written_bytes_total[5m]))",
               "intervalFactor": 4,
               "legendFormat": "written",
               "refId": "B",
@@ -522,7 +522,6 @@
             },
             {
               "expr": "sum(rate(node_disk_io_time_seconds_total[5m]))",
-              "hide": false,
               "intervalFactor": 4,
               "legendFormat": "io time",
               "refId": "C",
@@ -622,10 +621,10 @@
           },
           "targets": [
             {
-              "expr": "(sum(node_filesystem_size_bytes{device!=\"/\"}) - sum(node_filesystem_free_bytes{device!=\"/\"})) / sum(node_filesystem_size_bytes{device!=\"/\"})",
+              "expr": "(sum(node_filesystem_size_bytes{device!=\"rootfs\"}) - sum(node_filesystem_free_bytes{device!=\"rootfs\"})) / sum(node_filesystem_size_bytes{device!=\"rootfs\"})",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 60,
+              "step": 40,
               "target": ""
             }
           ],
@@ -703,7 +702,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
+              "step": 4,
               "target": ""
             }
           ],
@@ -791,7 +790,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "B",
-              "step": 10,
+              "step": 4,
               "target": ""
             }
           ],
@@ -841,7 +840,7 @@
     }
   ],
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -875,9 +874,8 @@
   "annotations": {
     "list": []
   },
-  "refresh": false,
   "schemaVersion": 12,
-  "version": 7,
+  "version": 19,
   "links": [],
   "gnetId": 3131
 }

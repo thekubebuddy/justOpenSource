@@ -2,8 +2,8 @@
 
 Table of content
 ======================
-1. Adding user's to the argocd 
-2. Enforcing readonly policy to the newly created user
+1. [Adding user's to the argocd](#1-adding-users-to-the-argocd)
+2. [Enforcing readonly policy to the newly created user](#2-enforcing-readonly-policy-to-the-newly-created-user)
 
 
 
