@@ -1,0 +1,37 @@
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  namespace: argocd
+  name: argocd-server-cert
+  labels:
+    app: argocd-server
+spec:
+  domains:
+    - dev-argocd.example.com
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: argocd
+  name:  argocd-server-ing
+  labels:
+    app: argocd-server
+    env: pilot
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    networking.gke.io/managed-certificates: argocd-server-cert
+    kubernetes.io/ingress.global-static-ip-name: argocd-ingress-ext-ip
+spec:
+  backend:
+    serviceName: argocd-server
+    servicePort: 80
+  rules:
+  - host: dev-argocd.example.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: argocd-server
+          servicePort: 80
+# gcloud compute addresses create argocd-ingress-ext-ip --ip-version=IPV4 --global
