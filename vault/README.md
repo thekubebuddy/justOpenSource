@@ -47,7 +47,7 @@ https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/k
 
 
 
-## Configuring the vault with the *GCP secret engine*
+## Configuring vault with the GCP secret engine
 
 
 1. Enabling the google secret engine
@@ -114,3 +114,41 @@ curl -i "https://container.googleapis.com/v1beta1/projects/<project-od>/location
 
 Refrence:
 https://www.vaultproject.io/docs/secrets/gcp#google-cloud-secrets-engine
+
+
+
+## Vault on GCE 
+```
+gsutil cp -r gs://spls/gsp205 .
+cd gsp205
+unzip tf-google-vault.zip
+cd terraform-google-vault/
+export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+cat - > terraform.tfvars <<EOF
+project_id = "${GOOGLE_CLOUD_PROJECT}"
+kms_keyring = "vault"
+kms_crypto_key = "vault-init"
+EOF
+terraform init
+export VAULT_ADDR="$(terraform output vault_addr)"
+export VAULT_CACERT="$(pwd)/ca.crt"
+``` 
+
+## Vault cheetsheet
+```
+complete -C /usr/bin/vault vault
+export VAULT_CACERT=""
+export VAULT_ADDR=""
+
+# vault initializing status
+vault operator init -recovery-shares 5 -recovery-threshold 3
+# vault is initialized or not
+vault operator init -status
+# for sealing & unsealing the vault
+vault operator seal
+vault operator unseal
+# vault secrets engine
+vault secrets list
+vault secrets enable kv
+```
+
