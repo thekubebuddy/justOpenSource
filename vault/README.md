@@ -55,10 +55,10 @@ https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/k
 vault secrets enable gcp
 ```
 
-2. configuring the vault google secret engine with the root SA with the "Service Account Admin", "Service Account Key Admin", "Project IAM Admin" roles
+2. configuring the vault google secret engine with the root SA with the **"Service Account Admin", "Service Account Key Admin", "Project IAM Admin"** roles
 ```
 
-PROJECT_ID=<project-id>
+PROJECT_ID=`gcloud config get-value project`
 SERVICE_ACCOUNT_NAME=vault-admin-roleset-sa
 gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME
 
