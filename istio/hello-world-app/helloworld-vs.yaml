@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello-world
+spec:
+  hosts:
+    - "dev.hello-world.com" #allowing only dev,prod subdomains for the parent hello-world.com
+    - "prod.hello-world.com"
+  gateways:
+    - gateway #binding the "gateway" ingress gateway with the vs
+  http:
+    - route:
+        - destination:
+            host: pythonapp-svc-copy.default.svc.cluster.local #cross namespace svc mapping also works
+            port:
+              number: 80
