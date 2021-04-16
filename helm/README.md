@@ -105,6 +105,9 @@ helm dep list
 # downloads the latest jenkins chart from the helm repo
 helm pull stable/jenkins --untar --version=1.1.4
 
+# dryrunning the template & generating the templates with the values.yaml input.
+helm install appchart . --namespace test-ns --create-namespace 
+helm install appchart .  --dry-run --debug
 
 #v2.14
 helm install --name <release-name> <chart-name>
