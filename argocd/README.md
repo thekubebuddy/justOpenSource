@@ -48,8 +48,11 @@ data:
   policy.default: role:readonly
 ```
 
+### 3. accessing argocd through the CLI
+```
+argocd login localhost:8080 --insecure
 
-
+```
 
 ### References
 https://argoproj.github.io/argo-cd/operator-manual/user-management/

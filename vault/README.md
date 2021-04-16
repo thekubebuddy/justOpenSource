@@ -224,5 +224,7 @@ https://www.vaultproject.io/docs/concepts/policies#built-in-policies
 https://www.vaultproject.io/docs/concepts/tokens#periodic-tokens
 https://learn.hashicorp.com/tutorials/vault/generate-root#use-one-time-password-otp
 https://learn.hashicorp.com/tutorials/vault/rekeying-and-rotating
+https://medium.com/google-cloud/vault-auth-and-secrets-on-gcp-51bd7bbaceb
 ```
+
 

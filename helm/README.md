@@ -112,3 +112,9 @@ helm install appchart .  --dry-run --debug
 #v2.14
 helm install --name <release-name> <chart-name>
 ```
+
+Refernces:
+```
+https://helm.sh/docs/chart_template_guide/functions_and_pipelines/#using-the-default-function
+https://helm.sh/docs/chart_template_guide/builtin_objects/
+```
