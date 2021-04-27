@@ -22,7 +22,7 @@ export VAULT_TOKEN=""
 ```
 
 ### Vault "kv" engine with custom path & usecase within k8s
-* Application: Storing the postgresql admin password in vault and fethching from the k8s psql pod
+* **Application:** Storing the postgresql admin password in vault and fethching from the k8s psql pod
 
 ```bash
 # enabling the vault kv secret engine with the postgresql path
@@ -73,15 +73,15 @@ vault write sys/auth/my-auth type=userpass
 
 
 ### Configuring vault with the GCP secret engine
-
+* **Usecase:** Getting the GCP IAM SA access token from the specific GCP roleset through the vault provider and passing it to the GCP terraform provider for allowing authentication for tf workflows  
 
 1. Enabling the google secret engine
-```
+```bash
 vault secrets enable gcp
 ```
 
 2. configuring the vault google secret engine with the root SA with the **"Service Account Admin", "Service Account Key Admin", "Project IAM Admin"** roles
-```
+```bash
 
 PROJECT_ID=`gcloud config get-value project`
 SERVICE_ACCOUNT_NAME=vault-admin-roleset-sa
@@ -105,13 +105,13 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
 gcloud iam service-accounts keys create --iam-account ${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com ./sa.json
 ```
 
-```
+```bash
 vault write gcp/config credentials=@sa.json ttl=3600 max_ttl=86400
 ```
 
 3. Roleset creation for token & SA key creation, this will create secondary SA which is created by the root auth
-```
-project=""
+```bash
+project=`gcloud config get-value project`
 vault write gcp/roleset/terraform-gcp-gcs-admin-roleset \
         token_scopes="https://www.googleapis.com/auth/cloud-platform" \
         project=$project \
@@ -132,9 +132,9 @@ vault delete gcp/roleset/terraform-gcp-roleset
 ```
 
 
-5. Sample API call with the OAuth Barear token
+5. GCP API call with the OAuth Barear token
 ```
-curl -i "https://container.googleapis.com/v1beta1/projects/<project-od>/locations/us-central1/serverConfig?alt=json&prettyPrint=false" --header 'authorization: Bearer ya29.c.sOnFxokknu-3AxWa2CQKDXTPI9Si0QVvVmPyVasdadvSfyAtCkekQdYbI5mVJNn-adasdasdaa'     --header 'Content-Length: 0'
+curl -i "https://container.googleapis.com/v1beta1/projects/<project-id>/locations/us-central1/serverConfig?alt=json&prettyPrint=false" --header 'authorization: Bearer ya29.c.sOnFxokknu-3AxWa2CQKDXTPI9Si0QVvVmPyVasdadvSfyAtCkekQdYbI5mVJNn-adasdasdaa'     --header 'Content-Length: 0'
 ```
 
 
@@ -162,7 +162,7 @@ export VAULT_CACERT="$(pwd)/ca.crt"
 
 ### Generating vault token binded to specific GCP roleset path
 
-* For the below testing the GCP secret engine must be enabled & configured
+* For the demonstration, the GCP secret engine must be enabled & configured
 * Relation between a token & how RBAC works for the vault
 ```
 vault token <--> policy <---> capabilities(permissions) 
@@ -173,7 +173,7 @@ vault token <--> policy <---> capabilities(permissions)
 vault policy write dev01-secrets-policy  dev01_secrets_policy.hcl
 ```
 
-2. Binding & token creation with the above policies(without any default policy attached)
+2. Binding & token creation with the above policies`(without any default policy attached)`
 ```
 vault token create -display-name=dev01-vault-token -ttl=0 -max-ttl=0  -policy=dev01-secrets-policy  -no-default-policy
 
@@ -182,7 +182,7 @@ vault token create --help
 ```
 
 3. Testing the above vault token
-```
+```bash
 # login with the above token generated
 vault login 
 
