@@ -22,7 +22,7 @@ export VAULT_TOKEN=""
 ```
 
 ### Vault "kv" engine with custom path & usecase within k8s
-* **Application:** Storing the postgresql admin password in vault and fethching from the k8s psql pod
+* **Application:** Storing the postgresql admin password for different dbs in different env. in vault and fethching from the k8s psql pod
 
 ```bash
 # enabling the vault kv secret engine with the postgresql path
