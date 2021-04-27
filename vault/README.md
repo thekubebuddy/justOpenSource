@@ -1,13 +1,15 @@
 Table of content
 ==================
+* [Vault dev setup - to get started](#starting-the-dev-vault-server-on-localhost)
+* [Vault kv engine with custom path and usecase of it within k8s pod](#vault-kv-engine-with-custom-path--usecase-within-k8s)
 * [Configuring vault with the GCP secret engine](#configuring-vault-with-the-gcp-secret-engine)
 * [Deploying Vault on GCE with terraform](#deploying-vault-on-gce-with-terraform)
-* [Generating vault token binded to specific access policies](generating-vault-token-binded-to-specific-gcp-roleset-path)
+* [Generating vault token binded to specific access policies](#generating-vault-token-binded-to-specific-gcp-roleset-path)
 * [Generating the root token in case loss or revoked](#generating-the-root-token-in-case-loss-or-revoked)
 * [Vault cheetsheet](#vault-cheetsheet)
 
 
-### Starting the dev-vault server on localhost:**
+### Starting the dev-vault server on localhost
 ```bash
 #Vault download: https://www.vaultproject.io/downloads
 vault server -dev -dev-root-token-id root -dev-listen-address 0.0.0.0:8200
@@ -107,7 +109,7 @@ gcloud iam service-accounts keys create --iam-account ${SERVICE_ACCOUNT_NAME}@${
 vault write gcp/config credentials=@sa.json ttl=3600 max_ttl=86400
 ```
 
-3. roleset creation for token & SA key creation, this will create secondary SA which is created by the root auth
+3. Roleset creation for token & SA key creation, this will create secondary SA which is created by the root auth
 ```
 project=""
 vault write gcp/roleset/terraform-gcp-gcs-admin-roleset \
@@ -121,7 +123,7 @@ vault write gcp/roleset/terraform-gcp-gcs-admin-roleset \
 EOF
 ```
 
-4. list, read, create the token, SA keys from those SA
+4. List, Read, Create the token, SA keys from those SA
 ```
 vault read gcp/roleset/terraform-gcp-roleset
 vault read gcp/token/terraform-gcp-roleset
@@ -224,6 +226,8 @@ vault operator generate-root
 complete -C /usr/bin/vault vault
 export VAULT_CACERT=""
 export VAULT_ADDR=""
+export VAULT_TOKEN=""
+
 # vault initializing status
 vault operator init -recovery-shares 5 -recovery-threshold 3
 # vault is initialized or not
