@@ -1,55 +1,76 @@
+Table of content
+==================
+* [Configuring vault with the GCP secret engine](#configuring-vault-with-the-gcp-secret-engine)
+* [Deploying Vault on GCE with terraform](#deploying-vault-on-gce-with-terraform)
+* [Generating vault token binded to specific access policies](generating-vault-token-binded-to-specific-gcp-roleset-path)
+* [Generating the root token in case loss or revoked](#generating-the-root-token-in-case-loss-or-revoked)
+* [Vault cheetsheet](#vault-cheetsheet)
 
-**Starting the dev-vault server on localhost:**
-```
+
+### Starting the dev-vault server on localhost:**
+```bash
+#Vault download: https://www.vaultproject.io/downloads
 vault server -dev -dev-root-token-id root -dev-listen-address 0.0.0.0:8200
+
+# vault cli auto-completion
 complete -C $(readlink -f $(which vault)) vault
 
 export VAULT_ADDR="http://0.0.0.0:8200"
+export VAULT_TOKEN=""
+```
+
+### Vault "kv" engine with custom path & usecase within k8s
+* Application: Storing the postgresql admin password in vault and fethching from the k8s psql pod
+
+```bash
+# enabling the vault kv secret engine with the postgresql path
+vault secrets enable -path="postgresql" kv
+vault secrets list
+
+# inserting the secrets at specified path
+vault kv put postgresql/secrets/pre-prod/pg-db01 pg_passwd=admin123
+vault kv put postgresql/secrets/pre-prod/pg-db02 pg_passwd=admin123
+
+# list and reading the vaules
+vault kv list postgresql/secrets/pre-prod
+vault kv get postgresql/secrets/pre-prod/pg-db01
+vault read -format json postgresql/secrets/pre-prod/pg-db01 | jq ".data.pg_passwd"
+```
+
+* YAML spec for the consul-template init container.
+
+Refer the `k8s-vault-secret-app.yaml` for more understanding
+```bash
+...
+
+            template {
+              contents = <<EOH
+            {{- with secret "postgresql/secrets/pre-prod/pg-db01" }}
+            export PG_PASSWD={{ .data.pg_passwd }}
+            {{- end }}
+            EOH
+              destination = "/etc/secrets/pg-passwd"
+            }
+...
+...
+ args: ["/bin/sh", "-c","source /etc/secrets/pg-passwd && <main-process>"]
 ```
 
 
-**Enabling the userpass engine:**
-```
+### Enabling the userpass engine
+```bash
 vault auth list
 vault auth enable -path=training-userpass -description="userpass at a different path" userpass
 vault auth enable -path=userpass -description="userpass at a different path" userpass
-```
-
-**Path-help**
-``` 
+#Path-help
 vault path-help userpass
-```
-
-OR
-```
 vault write sys/auth/my-auth type=userpass
 ```
 
-Recovery Key Rekeying
-vault operation rekey -target=recovery
-
-Revokation of the vault 
-```
-vault lease revoke
-```
 
 
 
-Vault secret engine example:
-```
-vault kv put secret/devwebapp/config username='giraffe' password='salsa'
-vault read -format json secret/data/devwebapp/config | jq ".data.data"
-```
-
-
-Rotating the GCP service account keys: 
-https://www.vaultproject.io/api-docs/secret/gcp#rotate-root-credentials
-
-https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes
-
-
-
-## Configuring vault with the GCP secret engine
+### Configuring vault with the GCP secret engine
 
 
 1. Enabling the google secret engine
@@ -114,30 +135,30 @@ vault delete gcp/roleset/terraform-gcp-roleset
 curl -i "https://container.googleapis.com/v1beta1/projects/<project-od>/locations/us-central1/serverConfig?alt=json&prettyPrint=false" --header 'authorization: Bearer ya29.c.sOnFxokknu-3AxWa2CQKDXTPI9Si0QVvVmPyVasdadvSfyAtCkekQdYbI5mVJNn-adasdasdaa'     --header 'Content-Length: 0'
 ```
 
-Refrence:
-https://www.vaultproject.io/docs/secrets/gcp#google-cloud-secrets-engine
 
 
 
-## Deploying Vault on GCE with terraform 
-```
+### Deploying Vault on GCE with terraform 
+```bash
 gsutil cp -r gs://spls/gsp205 .
 cd gsp205
 unzip tf-google-vault.zip
 cd terraform-google-vault/
 export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+
 cat - > terraform.tfvars <<EOF
 project_id = "${GOOGLE_CLOUD_PROJECT}"
 kms_keyring = "vault"
 kms_crypto_key = "vault-init"
 EOF
+
 terraform init
 export VAULT_ADDR="$(terraform output vault_addr)"
 export VAULT_CACERT="$(pwd)/ca.crt"
 ``` 
 
 
-## Generating vault token binded to specific GCP roleset path
+### Generating vault token binded to specific GCP roleset path
 
 * For the below testing the GCP secret engine must be enabled & configured
 * Relation between a token & how RBAC works for the vault
@@ -180,27 +201,29 @@ vault token revoke <token>
 ```
 
 
-## Generating the root token in case loss or revoked.
+### Generating the root token in case loss or revoked.
 * Regeneration of the root token is only possible if you got the unseal keys in place
 
-```
+```bash
 vault status
 
 # will ask for the unseal keys
+#returns Nonce,otp: 
 vault operator generate-root -init
-returns Nonce,otp: 
 
+# returns: encoded-token
 vault operator generate-root
-returns: encoded-token
 
 4. vault operator generate-root -decode=<encoded-token> -otp=<otp-generated-in-the-step-2>
 ```
-## Vault cheetsheet
-```
+
+
+### Vault cheetsheet
+```bash
+#https://www.vaultproject.io/docs/commands#vault_token
 complete -C /usr/bin/vault vault
 export VAULT_CACERT=""
 export VAULT_ADDR=""
-
 # vault initializing status
 vault operator init -recovery-shares 5 -recovery-threshold 3
 # vault is initialized or not
@@ -215,16 +238,30 @@ vault secrets enable kv
 
 
 
-### References
+#### References
 ```
-# vault provider for the terraform
+
+# terraform provider for vault
 https://registry.terraform.io/providers/hashicorp/vault/latest/docs
+
+# skipping built-in policies for the token generation
 https://www.vaultproject.io/docs/concepts/tokens#explicit-max-ttls
 https://www.vaultproject.io/docs/concepts/policies#built-in-policies
 https://www.vaultproject.io/docs/concepts/tokens#periodic-tokens
+
 https://learn.hashicorp.com/tutorials/vault/generate-root#use-one-time-password-otp
 https://learn.hashicorp.com/tutorials/vault/rekeying-and-rotating
 https://medium.com/google-cloud/vault-auth-and-secrets-on-gcp-51bd7bbaceb
+
+# Configuring the vault gcp secrets engine
+https://www.vaultproject.io/docs/secrets/gcp#google-cloud-secrets-engine
+
+
+# Rotating the GCP service account keys: 
+https://www.vaultproject.io/api-docs/secret/gcp#rotate-root-credentials
+https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes
+
+
 ```
 
 
