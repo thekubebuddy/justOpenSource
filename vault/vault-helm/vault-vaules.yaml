@@ -1,0 +1,15 @@
+# https://github.com/hashicorp/vault-helm/blob/master/values.yaml
+#global:
+#  tlsDisable: true
+server:
+  ha:
+    enabled: true
+    replicas: 1
+    raft: 
+      enabled: true
+      setNodeId: true
+  service:
+    type: LoadBalancer
+    annotations: 
+      cloud.google.com/load-balancer-type: "Internal"
+  
