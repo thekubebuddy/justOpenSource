@@ -1,7 +1,10 @@
-Elasticsearch 
-1. Installation of specific elasticsearch version on the GCE(Centos 7)
-2. Setting up the 2xNodes Elasticsearch cluster with 2 nodes(1xmaster, 1xdata)
-3. Elasticsearch cheetsheet
+# Elasticsearch workbook 
+
+Table of content
+==================
+1. [Installation of specific elasticsearch version on the GCE(Centos 7)](#installation-of-the-elasticsearchv661)
+2. [Setting up the 2xNodes Elasticsearch cluster with 2 nodes(1xmaster, 1xdata)](#setting-up-the-elasticsearch-cluster-with-2-nodes1xmaster-1xdata)
+3. [Elasticsearch cheetsheet](#elasticsearch-cheetsheetapi-calls)
 
 
 ### Installation of the Elasticsearch(v6.6.1)
