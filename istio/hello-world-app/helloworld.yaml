@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world
+  name: hello-world-01
   labels:
     app: hello-world
 spec:
@@ -24,7 +24,44 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: hello-world
+  name: hello-world-01
+  labels:
+    app: hello-world
+spec:
+  selector:
+    app: hello-world
+  ports:
+    - port: 80
+      name: http
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-02
+  labels:
+    app: hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - image: gcr.io/tetratelabs/hello-world:1.0.0
+          imagePullPolicy: Always
+          name: svc
+          ports:
+            - containerPort: 3000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-world-02
   labels:
     app: hello-world
 spec:

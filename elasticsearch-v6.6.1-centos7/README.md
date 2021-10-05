@@ -56,7 +56,7 @@ sudo yum --enablerepo=elasticsearch-6.x --showduplicates list elasticsearch-oss
 sudo yum -y install elasticsearch-oss-6.6.1
 ```
 
-3.4 Changing the jvm param. as per machine size
+3.4 Changing the jvm param. as per machine size(Optional)
 
 ```bash
 sudo vi /etc/elasticsearch/jvm.options

@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: gateway
+  name: hello-world-gateway
 spec:
   selector:
     istio: ingressgateway
@@ -11,5 +11,7 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - '*.hello-world.com' # allowing all subdomains for the hello-world.com domain, filtering subdomains at the VS level
+        - '*.app.convoy.com' # allowing all subdomains for the hello-world.com domain, filtering subdomains at the VS level
+
+
 
