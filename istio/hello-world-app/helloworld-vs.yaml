@@ -5,7 +5,7 @@ metadata:
   name: hello-world
 spec:
   hosts:
-    - "test.app.convoy.com"
+    - "test.app.example.com"
   gateways:
     - hello-world-gateway #binding the "gateway" ingress gateway with the vs
   http:
